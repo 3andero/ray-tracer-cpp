@@ -11,7 +11,7 @@ Plane::do_hit(const Ray &ray, array<float, 2> ray_len_range) const
 	let ray_len = origin.sub(ray.start).dot(z) / z.dot(ray.dir);
 
 	if (!in_range(ray_len, ray_len_range)) {
-		return None_<HitRecord>();
+		return None<HitRecord>();
 	}
 
 	let hit_point = ray.at(ray_len);
@@ -22,10 +22,10 @@ Plane::do_hit(const Ray &ray, array<float, 2> ray_len_range) const
 		let dx = o_hp.dot(x) / (x.dot(x));
 		let dy = o_hp.dot(y) / (y.dot(y));
 		if (!in_range(dx, array{0.f, 1.f}) || !in_range(dy, array{0.f, 1.f})) {
-			return None_<HitRecord>();
+			return None<HitRecord>();
 		}
 	}
-	return Some_(
+	return Some(
 		HitRecord{
 			ray_len,
 			ray.dir.dot(z) < 0 ?

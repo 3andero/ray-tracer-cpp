@@ -7,7 +7,7 @@
 Option<HitRecord>
 HittableContainer::do_hit(const Ray &ray, array<float, 2> ray_len_range) const
 {
-	auto hit = None_<HitRecord>();
+	auto hit = None<HitRecord>();
 
 	for (const auto &ele : elements) {
 		let_mut maybe_record = ele.hit(ray, ray_len_range);

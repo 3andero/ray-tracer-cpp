@@ -15,9 +15,9 @@ class Sphere: public Hittable<Sphere>
 public:
 	PointRT center;
 	float radius;
-	MaterialVariant material;
+	Materials material;
 
-	Sphere(PointRT ct, float rd, MaterialVariant mt)
+	Sphere(PointRT ct, float rd, Materials mt)
 		: center(ct), radius(rd), material(mt)
 	{}
 

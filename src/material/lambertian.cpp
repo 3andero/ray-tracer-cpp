@@ -10,5 +10,5 @@
 Lambertian::do_scatter(const HitRecord &h, const Ray &ray_in) const
 {
 	let target = h.hit_point.add(h.normal.unwrap()).add_inplace(VectorRT(random_unit_vec()));
-	return Some_(tuple{color.as_vec3(), Ray(h.hit_point, target)});
+	return Some(tuple{color.as_vec3(), Ray(h.hit_point, target)});
 }

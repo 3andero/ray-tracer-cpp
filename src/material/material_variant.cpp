@@ -5,22 +5,14 @@
 #include "material_variant.h"
 
 [[nodiscard]] Option<std::tuple<Vec3, Ray>>
-MaterialVariant::do_scatter(const HitRecord &h, const Ray &ray_in) const
+Materials::do_scatter(const HitRecord &h, const Ray &ray_in) const
 {
-	let_mut res = None_<std::tuple<Vec3, Ray>>();
-	std::visit(overload{
-		[&](const Lambertian &l)
-		{
-			res = l.scatter(h, ray_in);
-		},
-		[&](const Mirror &l)
-		{
-			res = l.scatter(h, ray_in);
-		},
-		[&](const Refraction &l)
-		{
-			res = l.scatter(h, ray_in);
-		},
-	}, *this);
-	return res;
+	switch (tag_) {
+	case Var::Lambertian:
+		return data.l.scatter(h, ray_in);
+	case Var::Mirror:
+		return data.m.scatter(h, ray_in);
+	case Var::Refraction:
+		return data.r.scatter(h, ray_in);
+	}
 }

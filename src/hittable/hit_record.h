@@ -33,7 +33,7 @@ public:
 	{
 		return normal;
 	}
-	bool
+	[[nodiscard]] bool
 	is_inside() const
 	{
 		return position == Position::Inside;
@@ -46,9 +46,9 @@ public:
 	float ray_len;
 	HitPosition normal;
 	PointRT hit_point;
-	MaterialVariant material;
+	Materials material;
 
-	HitRecord(float rl, HitPosition nm, PointRT hp, MaterialVariant mt)
+	HitRecord(float rl, HitPosition nm, PointRT hp, Materials mt)
 		: ray_len(rl), normal(nm), hit_point(hp),
 		  material(mt)
 	{}

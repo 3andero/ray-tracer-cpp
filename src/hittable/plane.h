@@ -18,24 +18,24 @@ public:
 	PointRT origin;
 	Option<tuple<VectorRT, VectorRT>> x_y;
 	VectorRT z;
-	MaterialVariant material;
+	Materials material;
 
 	static Plane
 	new_finite(PointRT origin,
 			   VectorRT x,
 			   VectorRT y,
-			   MaterialVariant m)
+			   Materials m)
 	{
 		let z = x.cross(y);
-		return Plane{origin, Some_(tuple(x, y)), z, m};
+		return Plane{origin, Some(tuple(x, y)), z, m};
 	}
 
 	static Plane
 	new_infinite(PointRT origin,
 				 VectorRT z,
-				 MaterialVariant m)
+				 Materials m)
 	{
-		return Plane{origin, None_<tuple<VectorRT, VectorRT>>(), z, m};
+		return Plane{origin, None<tuple<VectorRT, VectorRT>>(), z, m};
 	}
 	[[nodiscard]] Option<HitRecord>
 	do_hit(const Ray &ray, array<float, 2> ray_len_range) const;
@@ -43,7 +43,7 @@ private:
 	Plane(PointRT origin,
 		  Option<tuple<VectorRT, VectorRT>> x_y,
 		  VectorRT z,
-		  MaterialVariant material)
+		  Materials material)
 		: origin(origin), x_y(std::move(x_y)), z(z), material(material)
 	{}
 

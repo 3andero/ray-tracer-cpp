@@ -5,100 +5,129 @@
 #ifndef RAY_TRACER_CPP_ENUM_UTILS_H
 #define RAY_TRACER_CPP_ENUM_UTILS_H
 
-#include <variant>
 
 template<typename T>
-struct Some
-{
-	T val;
-};
-
-template<typename T>
-Some(T) -> Some<T>;
-
-struct None
-{
-};
-
-template<typename T>
-using OptionVariant = std::variant<Some<T>, None>;
-
-template<typename T>
-class Option: public OptionVariant<T>
+class Option
 {
 public:
-	using OptionVariant<T>::OptionVariant;
-	using OptionVariant<T>::operator=;
+	enum class Var
+	{
+		SOME,
+		NONE,
+	};
 
 	const T &
 	unwrap() const
 	{
-		return std::get<Some<T>>(*this).val;
+		assert(tag == Var::SOME);
+		return data.val;
 	}
 
 	T &
 	unwrap_mut()
 	{
-		return std::get<Some<T>>(*this).val;
+		assert(tag == Var::SOME);
+		return data.val;
 	}
 
 	[[nodiscard]] bool
 	is_some() const
 	{
-		return this->index() == 0;
+		return tag == Var::SOME;
 	}
 
 	[[nodiscard]] bool
 	is_none() const
 	{
-		return this->index() != 0;
+		return tag == Var::NONE;
 	}
+private:
+	template<typename U>
+	friend Option<U>
+	Some(U val);
+
+	template<typename U>
+	friend Option<U>
+	None();
+
+	explicit Option(T val)
+		: tag(Var::SOME), data(Data{.val= val})
+	{
+	}
+
+	explicit Option()
+		: tag(Var::NONE), data(Data{.na=false})
+	{
+	}
+
+	union Data
+	{
+		T val;
+		bool na;
+	};
+
+	Var tag;
+	Data data;
 };
-
-template<typename T>
-Option(Some<T>) -> Option<T>;
-
 
 template<typename T>
 Option<T>
-Some_(T val)
+Some(T val)
 {
-	return Option{Some{val}};
+	return Option(val);
 }
 
-template<typename T>
-Option<T>
-None_()
+template<typename U>
+Option<U>
+None()
 {
-	return Option<T>{None{}};
+	return Option<U>();
 }
 
-template<typename T>
-struct Ok
-{
-	T val;
-};
-
-template<typename T> Ok(T) -> Ok<T>;
-
-template<typename T>
-struct Err
-{
-	T err;
-};
-
-template<typename T> Err(T) -> Err<T>;
-
-template<typename R, typename E>
-using Result = std::variant<Err<E>, Ok<R>>;
-
-template<class... Ts>
-struct overload: Ts ...
-{
-	using Ts::operator()...;
-};
-
-template<class... Ts>
-overload(Ts...) -> overload<Ts...>;
+//template<typename T>
+//Option(Some<T>) -> Option<T>;
+//
+//
+//template<typename T>
+//Option<T>
+//Some_(T data)
+//{
+//	return Option{Some{data}};
+//}
+//
+//template<typename T>
+//Option<T>
+//None_()
+//{
+//	return Option<T>{None{}};
+//}
+//
+//template<typename T>
+//struct Ok
+//{
+//	T data;
+//};
+//
+//template<typename T> Ok(T) -> Ok<T>;
+//
+//template<typename T>
+//struct Err
+//{
+//	T err;
+//};
+//
+//template<typename T> Err(T) -> Err<T>;
+//
+//template<typename R, typename E>
+//using Result = std::variant<Err<E>, Ok<R>>;
+//
+//template<class... Ts>
+//struct overload: Ts ...
+//{
+//	using Ts::operator()...;
+//};
+//
+//template<class... Ts>
+//overload(Ts...) -> overload<Ts...>;
 
 #endif //RAY_TRACER_CPP_ENUM_UTILS_H

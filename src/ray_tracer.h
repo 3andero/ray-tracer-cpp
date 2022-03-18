@@ -32,13 +32,11 @@ private:
 	solve(const Ray &ray, unsigned int bounce) const
 	{
 		if (bounce <= 0) {
-//			cout << "stop_bouncing ";
 			return {0, 0, 0};
 		}
 		else {
 			auto hit = world.hit(ray, {0.001, std::numeric_limits<float>::max()});
 			if (hit.is_some()) {
-//				cout << "hit_sth ";
 				auto r = hit.unwrap();
 				Option<tuple<Vec3, Ray>> scattered = r.scatter(ray);
 				if (scattered.is_some()) {
@@ -50,7 +48,6 @@ private:
 				}
 			}
 			else {
-//				cout << "background ";
 				auto dir = ray.dir.unit();
 				auto t = 0.5f * (dir[1] + 1.f);
 				return Vec3{1., 1., 1.}.mul_inplace(1.f - t)

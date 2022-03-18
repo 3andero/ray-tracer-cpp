@@ -17,14 +17,14 @@ Sphere::do_hit(const Ray &ray, array<float, 2> ray_len_range) const
 
 	let b2_4ac = m_p_n * m_p_n - m2 * (p_n2 - radius * radius);
 	if (b2_4ac < 0.) {
-		return None_<HitRecord>();
+		return None<HitRecord>();
 	}
 
 	let_mut root = (m_p_n - sqrtf(b2_4ac)) / m2;
 	if (root < ray_len_range[0] || root > ray_len_range[1]) {
 		root = (m_p_n + sqrtf(b2_4ac)) / m2;
 		if (root < ray_len_range[0] || root > ray_len_range[1]) {
-			return None_<HitRecord>();
+			return None<HitRecord>();
 		}
 	}
 
@@ -33,7 +33,7 @@ Sphere::do_hit(const Ray &ray, array<float, 2> ray_len_range) const
 
 	using Position = HitPosition::Position;
 
-	return Some_(HitRecord{
+	return Some(HitRecord{
 		root,
 		normal.dot(m) < 0 ? HitPosition(Position::Outsize, normal) :
 		HitPosition(Position::Inside, normal.neg_inplace()),

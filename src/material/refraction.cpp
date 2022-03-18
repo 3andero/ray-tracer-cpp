@@ -26,5 +26,5 @@ Refraction::do_scatter(const HitRecord &h, const Ray &ray_in) const
 	}
 
 	let out_ray = Ray{h.hit_point, out};
-	return Some_(tuple(attenuation, out_ray));
+	return Some(tuple(attenuation, out_ray));
 }
